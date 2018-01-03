@@ -42,7 +42,8 @@
   3. [call,assign(),...](#note3)
   4. [Array.from()](#note4)
   5. [Destructuring](#note5)
-  6. [Default Function Parameter](#note6)          
+  6. [Default Function Parameter](#note6)
+  7. [arrow Function](#note7)          
 
 ## Types
 
@@ -1225,7 +1226,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
 
 **[⬆ back to table](#table-of-contents)**
 
-#### note6
+#### note7
 
  - **箭头函数表达式**的语法比函数表达式更短，并且不绑定自己的this，arguments，super或 new.target。这些函数表达式最适合用于非方法函数，并且它们不能用作构造函数
 
@@ -1237,6 +1238,589 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     //支持解构函数
     const f = ([a,b]=[1,2],{c:c}={c:3})=>a+b+c;
     f(); 👉 6;
-    ```
+    ```   
 
 **[⬆ back to note](#table-of-note)**
+
+## Classes & Constructors
+
+ - 避免直接使用 `prototype` , 多用 `class`。因为 `class`语法更加简洁和阅读
+
+    ```javascript
+    // bad
+    function Queue(contents = []) {
+      this.queue = [...contents];
+    }
+    Queue.prototype.pop = function () {
+      const value = this.queue[0];
+      this.queue.splice(0, 1);
+      return value;
+    };
+
+    // good
+    class Queue {
+      constructor(contents = []) {
+        this.queue = [...contents];
+      }
+      pop() {
+        const value = this.queue[0];
+        this.queue.splice(0, 1);
+        return value;
+      }
+    }
+    ```
+
+ - 使用 `extends` 实现继承，因为这是继承原型的内置功能
+
+    ```javascript
+    // bad
+    const inherits = require('inherits');
+    function PeekableQueue(contents) {
+      Queue.apply(this, contents);
+    }
+    inherits(PeekableQueue, Queue);
+    PeekableQueue.prototype.peek = function () {
+      return this.queue[0];
+    };
+
+    // good
+    class PeekableQueue extends Queue {
+      peek() {
+        return this.queue[0];
+      }
+    }
+    ```
+
+ - 方法可以通过返回 `this` 来优化方法链
+
+    ```javascript
+    // bad
+    Jedi.prototype.jump = function () {
+      this.jumping = true;
+      return true;
+    };
+
+    Jedi.prototype.setHeight = function (height) {
+      this.height = height;
+    };
+
+    const luke = new Jedi();
+    luke.jump(); // => true
+    luke.setHeight(20); // => undefined
+
+    // good
+    class Jedi {
+      jump() {
+        this.jumping = true;
+        return this;
+      }
+
+      setHeight(height) {
+        this.height = height;
+        return this;
+      }
+    }
+
+    const luke = new Jedi();
+
+    luke.jump()
+    luke.setHeight(20);
+    ```
+
+ - 写一个通用的 `toString()` 方法也没问题，但是需要保证其能执行且没有其他影响
+
+    ```javascript
+    class Jedi {
+      constructor(options = {}) {
+        this.name = options.name || 'no name';
+      }
+
+      getName() {
+        return this.name;
+      }
+
+      toString() {
+        return `Jedi - ${this.getName()}`;
+      }
+    }
+    ```
+
+ - 如果没有指定类，那么类需要有一个默认的构造方法。一个空的构造函数或者只是委托给父类是没有必要的
+
+    ```javascript
+    // bad
+    class Jedi {
+      constructor() {}
+
+      getName() {
+        return this.name;
+      }
+    }
+
+    // bad
+    class Rey extends Jedi {
+      constructor(...args) {
+        super(...args);
+      }
+    }
+
+    // good
+    class Rey extends Jedi {
+      constructor(...args) {
+        super(...args);
+        this.name = 'Rey';
+      }
+    }
+    ```
+
+ - 避免出现两个一样的类成员，因为前一个成员会被覆盖从而导致错误
+
+    ```javascript
+    // bad
+    class Foo {
+      bar() { return 1; }
+      bar() { return 2; }
+    }
+
+    // good
+    class Foo {
+      bar() { return 1; }
+    }
+
+    // good
+    class Foo {
+      bar() { return 2; }
+    }
+    ```                             
+
+**[⬆ back to table](#table-of-contents)**
+
+## Modules
+
+ - 始终使用模块(`import`/`export`)来代替非标准的模块系统。你可以选择你喜欢的模块系统，因为模块代表未来
+
+    ```javascript
+    // bad
+    const AirbnbStyleGuide = require('./AirbnbStyleGuide');
+    module.exports = AirbnbStyleGuide.es6;
+
+    // ok
+    import AirbnbStyleGuide from './AirbnbStyleGuide';
+    export default AirbnbStyleGuide.es6;
+
+    // best
+    import { es6 } from './AirbnbStyleGuide';
+    export default es6;
+    ```
+
+ - 不要使用通配符进行导出，从而保证你输出一个独立的导出
+
+    ```javascript
+    // bad
+    import * as AirbnbStyleGuide from './AirbnbStyleGuide';
+
+    // good
+    import AirbnbStyleGuide from './AirbnbStyleGuide';
+    ```
+
+ - 不要把导入和导出写在一起，虽然一行简明扼要，但是我们更需要明确的导入方式和导出方式，保持其一致性 
+ 
+    ```javascript
+    // bad
+    // filename es6.js
+    export { es6 as default } from './AirbnbStyleGuide';
+
+    // good
+    // filename es6.js
+    import { es6 } from './AirbnbStyleGuide';
+    export default es6;
+    ```
+
+ - 一个路径一次支持一个导入，因为一个路径一次支持有多个导入，会使代码变得难以维护
+
+    ```javascript
+    // bad
+    import foo from 'foo';
+    // … some other imports … //
+    import { named1, named2 } from 'foo';
+
+    // good
+    import foo, { named1, named2 } from 'foo';
+
+    // good
+    import foo, {
+      named1,
+      named2,
+    } from 'foo';
+    ```
+
+ - 拒绝导出可变绑定，这种方式通常应该避免，但是不排除有某些特殊情况需要这么做，但是应该记住，通常只导出常量引用
+
+    ```javascript
+    // bad
+    let foo = 3;
+    export { foo };
+
+    // good
+    const foo = 3;
+    export { foo };
+    ``` 
+
+ - 在具有单一导出的模块中，建议使用默认导出而不是命名导出，这样对于代码的可读性和可维护性更加友好
+
+    ```javascript
+    // bad
+    export function foo() {}
+
+    // good
+    export default function foo() {}
+    ```
+
+ - 把所有的导入语句放在一起
+
+    ```javascript
+    // bad
+    import foo from 'foo';
+    foo.init();
+
+    import bar from 'bar';
+
+    // good
+    import foo from 'foo';
+    import bar from 'bar';
+
+    foo.init();
+    ```
+
+ - 多行导入应该项多行数组和对象一样缩进，这样保持 `{}` 内容的一致性
+
+    ```javascript
+    // bad
+    import {longNameA, longNameB, longNameC, longNameD, longNameE} from 'path';
+
+    // good
+    import {
+      longNameA,
+      longNameB,
+      longNameC,
+      longNameD,
+      longNameE,
+    } from 'path';
+    ```
+
+ - 导出语句中不允许出现 `webpack` 加载器语法。因为导入中使用加载器语法会将代码耦合到模块打包器中，，更建议使用 `webpack.config.js` 
+ 
+    ```javascript
+    // bad
+    import fooSass from 'css!sass!foo.scss';
+    import barCss from 'style!css!bar.css';
+
+    // good
+    import fooSass from 'foo.scss';
+    import barCss from 'bar.css';
+    ```              
+
+**[⬆ back to table](#table-of-contents)**
+
+## Iterators and Generators
+
+ - 不要使用迭代器，更推荐使用javascript的高阶方法而不是 `for-in`，`for-of` 这些。使用 `map()`，`every()`，`filter()`，`find()`，`findIndex()`，`reduce()`，`some()` 等遍历数组，以及`Object.keys()`，`Object.values()`，`Object.entries()`去生成数组，以便迭代对象。因为处理返回值的纯函数更容易定位问题
+
+    ```javascript
+    const numbers = [1, 2, 3, 4, 5];
+
+    // bad
+    let sum = 0;
+    for (let num of numbers) {
+      sum += num;
+    }
+    sum === 15;
+
+    // good
+    let sum = 0;
+    numbers.forEach((num) => {
+      sum += num;
+    });
+    sum === 15;
+
+    // best (use the functional force)
+    const sum = numbers.reduce((total, num) => total + num, 0);
+    sum === 15;
+
+    // bad
+    const increasedByOne = [];
+    for (let i = 0; i < numbers.length; i++) {
+      increasedByOne.push(numbers[i] + 1);
+    }
+
+    // good
+    const increasedByOne = [];
+    numbers.forEach((num) => {
+      increasedByOne.push(num + 1);
+    });
+
+    // best (keeping it functional)
+    const increasedByOne = numbers.map(num => num + 1);
+    ```
+
+ - 不要使用发生器，因为他们还没有很好的兼容
+
+ - 如果你一定要用发生器，一定要注意关键字符的间距，举个例子，`function*` 是一个不同于 `function` 的独特构造，并且 `*`是其构造的一部分
+
+    ```javascript
+    // bad
+    function * foo() {
+      // ...
+    }
+
+    // bad
+    const bar = function * () {
+      // ...
+    };
+
+    // bad
+    const baz = function *() {
+      // ...
+    };
+
+    // bad
+    const quux = function*() {
+      // ...
+    };
+
+    // bad
+    function*foo() {
+      // ...
+    }
+
+    // bad
+    function *foo() {
+      // ...
+    }
+
+    // very bad
+    function
+    *
+    foo() {
+      // ...
+    }
+
+    // very bad
+    const wat = function
+    *
+    () {
+      // ...
+    };
+
+    // good
+    function* foo() {
+      // ...
+    }
+
+    // good
+    const foo = function* () {
+      // ...
+    };
+    ```      
+
+**[⬆ back to table](#table-of-contents)**
+
+## Properties
+
+ - 通过常量访问属性的时候使用 `.`
+
+    ```javascript
+    const luke = {
+      jedi: true,
+      age: 28,
+    };
+
+    // bad
+    const isJedi = luke['jedi'];
+
+    // good
+    const isJedi = luke.jedi;
+    ```
+
+ - 通过变量访问属性的时候用 `[]`
+
+    ```javascript
+    const luke = {
+      jedi: true,
+      age: 28,
+    };
+
+    function getProp(prop) {
+      return luke[prop];
+    }
+
+    const isJedi = getProp('jedi');
+    ```
+
+ - 使用 `**` 进行指数运算
+
+    ```javascript
+    // bad
+    const binary = Math.pow(2, 10);
+
+    // good
+    const binary = 2 ** 10;
+    ```           
+
+**[⬆ back to table](#table-of-contents)**
+
+## Variables
+
+ - 总是使用 `const` 或者 `let` 来声明变量，这样做可以避免污染全局命名空间
+
+    ```javascript
+    // bad
+    superPower = new SuperPower();
+
+    // good
+    const superPower = new SuperPower();
+    ```
+
+ - 每个变量声明都对应一个 `const` 或者 `let`。这样做，可以独立的声明每一个变量，而不需要考虑 `;`和`,`的关系，同时也方便对每个声明进行调试，而不是跳过所有的声明
+
+    ```javascript
+    // bad
+    const items = getItems(),
+        goSportsTeam = true,
+        dragonball = 'z';
+
+    // bad
+    // (compare to above, and try to spot the mistake)
+    const items = getItems(),
+        goSportsTeam = true;
+        dragonball = 'z';
+
+    // good
+    const items = getItems();
+    const goSportsTeam = true;
+    const dragonball = 'z';
+    ```
+
+ - 对 `let` 和 `const` 进行分组，这样增强代码可读性
+
+    ```javascript
+    // bad
+    let i, len, dragonball,
+        items = getItems(),
+        goSportsTeam = true;
+
+    // bad
+    let i;
+    const items = getItems();
+    let dragonball;
+    const goSportsTeam = true;
+    let len;
+
+    // good
+    const goSportsTeam = true;
+    const items = getItems();
+    let dragonball;
+    let i;
+    let length;
+    ```
+
+ - 在需要的地方声明变量，因为 `const` 和 `let` 是块作用域而不是函数作用域
+
+    ```javascript
+    // bad - unnecessary function call
+    function checkName(hasName) {
+      const name = getName();
+
+      if (hasName === 'test') {
+        return false;
+      }
+
+      if (name === 'test') {
+        this.setName('');
+        return false;
+      }
+
+      return name;
+    }
+
+    // good
+    function checkName(hasName) {
+      if (hasName === 'test') {
+        return false;
+      }
+
+      const name = getName();
+
+      if (name === 'test') {
+        this.setName('');
+        return false;
+      }
+
+      return name;
+    }
+    ```
+
+ - 不要进行链式声明变量的操作，这样可能创建隐式的全局变量
+
+    ```javascript
+    // bad
+    (function example() {
+      // JavaScript interprets this as
+      // let a = ( b = ( c = 1 ) );
+      // The let keyword only applies to variable a; variables b and c become
+      // global variables.
+      let a = b = c = 1;
+    }());
+
+    console.log(a); // throws ReferenceError
+    console.log(b); // 1
+    console.log(c); // 1
+
+    // good
+    (function example() {
+      let a = 1;
+      let b = a;
+      let c = a;
+    }());
+
+    console.log(a); // throws ReferenceError
+    console.log(b); // throws ReferenceError
+    console.log(c); // throws ReferenceError
+
+    // the same applies for `const`
+    ```
+
+ - 不要使用一元递增和递减操作符（++，--），因为一元递增和一元递减可能受到分号插入的影响，并且可能导致应用中的值递增或者递减，并且不会报错。使用 `num += 1` 类似的语句也更加有表现力，并且可以避免预先递增或者递减从而导致程序发生意外
+
+    ```javascript
+    // bad
+
+    const array = [1, 2, 3];
+    let num = 1;
+    num++;
+    --num;
+
+    let sum = 0;
+    let truthyCount = 0;
+    for (let i = 0; i < array.length; i++) {
+      let value = array[i];
+      sum += value;
+      if (value) {
+        truthyCount++;
+      }
+    }
+
+    // good
+
+    const array = [1, 2, 3];
+    let num = 1;
+    num += 1;
+    num -= 1;
+
+    const sum = array.reduce((a, b) => a + b, 0);
+    const truthyCount = array.filter(Boolean).length;
+    ```                          
+
+**[⬆ back to table](#table-of-contents)**
+
+## Hoisting
