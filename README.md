@@ -1824,3 +1824,378 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
 **[⬆ back to table](#table-of-contents)**
 
 ## Hoisting
+
+ -  `var` 声明被置于函数作用域的顶部，但是他们的赋值不是， `const`和`let`声明会被置于一个新概念**TDZ**内。因此， `typeof()` 方法不再安全
+
+    ```javascript
+    // we know this wouldn’t work (assuming there
+    // is no notDefined global variable)
+    function example() {
+      console.log(notDefined); // => throws a ReferenceError
+    }
+
+    // creating a variable declaration after you
+    // reference the variable will work due to
+    // variable hoisting. Note: the assignment
+    // value of `true` is not hoisted.
+    function example() {
+      console.log(declaredButNotAssigned); // => undefined
+      var declaredButNotAssigned = true;
+    }
+
+    // the interpreter is hoisting the variable
+    // declaration to the top of the scope,
+    // which means our example could be rewritten as:
+    function example() {
+      let declaredButNotAssigned;
+      console.log(declaredButNotAssigned); // => undefined
+      declaredButNotAssigned = true;
+    }
+
+    // using const and let
+    function example() {
+      console.log(declaredButNotAssigned); // => throws a ReferenceError
+      console.log(typeof declaredButNotAssigned); // => throws a ReferenceError
+      const declaredButNotAssigned = true;
+    }
+    ```
+
+ - 匿名函数表达式会提升变量名，而不是函数赋值
+
+    ```javascript
+    function example() {
+      console.log(anonymous); // => undefined
+
+      anonymous(); // => TypeError anonymous is not a function
+
+      var anonymous = function () {
+        console.log('anonymous function expression');
+      };
+    }
+    ```
+
+ - 命名函数表达式提升变量名，而不是函数名或者函数体
+
+    ```javascript
+    function example() {
+      console.log(named); // => undefined
+
+      named(); // => TypeError named is not a function
+
+      superPower(); // => ReferenceError superPower is not defined
+
+      var named = function superPower() {
+        console.log('Flying');
+      };
+    }
+
+    // the same is true when the function name
+    // is the same as the variable name.
+    function example() {
+      console.log(named); // => undefined
+
+      named(); // => TypeError named is not a function
+
+      var named = function named() {
+        console.log('named');
+      };
+    }
+    ```
+
+ - 函数声明提升其名字和函数体
+
+    ```javascript
+    function example() {
+      superPower(); // => Flying
+
+      function superPower() {
+        console.log('Flying');
+      }
+    }
+    ```               
+
+**[⬆ back to table](#table-of-contents)**
+
+## Comparison Operators & Equality
+
+ - 使用 `===`,`!==` 取代 `==`,`!=`
+
+ - 条件语句比如 `if` 会强制使用 `ToBoolean` 抽象方法来进行转换，并且遵循以下规则：
+
+    - **Objects** 转换为 **true**
+    - **Undefined** 转换为 **false**
+    - **Null** 转换为 **false**
+    - **Booleans** 转换为 **the value of the boolean**
+    - **Numbers** 转换为 **false** 如果是 **+0, -0, or NaN**, 其余为 **true**
+    - **Strings** 转换为 **false** 如果是空字符串 `''`, 其余为 **true**
+
+    ```javascript
+    if ([0] && []) {
+      // true
+      // an array (even an empty one) is an object, objects will evaluate to true
+    }
+    ```
+
+ - 使用布尔值的快捷比较方式，但是显示比较字符串和数字
+
+    ```javascript
+    // bad
+    if (isValid === true) {
+      // ...
+    }
+
+    // good
+    if (isValid) {
+      // ...
+    }
+
+    // bad
+    if (name) {
+      // ...
+    }
+
+    // good
+    if (name !== '') {
+      // ...
+    }
+
+    // bad
+    if (collection.length) {
+      // ...
+    }
+
+    // good
+    if (collection.length > 0) {
+      // ...
+    }
+    ```
+
+ - 在 `switch` 语句中的 `case` 和 `default` 使用 `{}` 来创建块，比如`let`, `const`, `function`, `class` 也是如此。因为在整个 `switch` 块中词法声明是随处可见的，但是只有在赋值时才会被初始化，且只有 `case` 值达到时才会发生。但是当多个 `case` 子句试图定义相同的东西时，就会发生问题
+ 
+    ```javascript
+    // bad
+    switch (foo) {
+      case 1:
+        let x = 1;
+        break;
+      case 2:
+        const y = 2;
+        break;
+      case 3:
+        function f() {
+          // ...
+        }
+        break;
+      default:
+        class C {}
+    }
+
+    // good
+    switch (foo) {
+      case 1: {
+        let x = 1;
+        break;
+      }
+      case 2: {
+        const y = 2;
+        break;
+      }
+      case 3: {
+        function f() {
+          // ...
+        }
+        break;
+      }
+      case 4:
+        bar();
+        break;
+      default: {
+        class C {}
+      }
+    }
+    ```
+
+ - 三元表达式不应该嵌套，而应该单行表达
+
+    ```javascript
+    // bad
+    const foo = maybe1 > maybe2
+      ? "bar"
+      : value1 > value2 ? "baz" : null;
+
+    // split into 2 separated ternary expressions
+    const maybeNull = value1 > value2 ? 'baz' : null;
+
+    // better
+    const foo = maybe1 > maybe2
+      ? 'bar'
+      : maybeNull;
+
+    // best
+    const foo = maybe1 > maybe2 ? 'bar' : maybeNull;
+    ```
+
+ - 没事不要随便用三元表达式
+
+    ```javascript
+    // bad
+    const foo = a ? a : b;
+    const bar = c ? true : false;
+    const baz = c ? false : true;
+
+    // good
+    const foo = a || b;
+    const bar = !!c;
+    const baz = !c;
+    ```
+
+ - 当多个运算符混在一个语句中时，将需要的运算符括在括号里面，并且用括号区分开 `**`,`%`与 `+`,`-`,`*`,`/`,这样代码更加有可读性，并且澄清了开发者的意图
+
+    ```javascript
+    // bad
+    const foo = a && b < 0 || c > 0 || d + 1 === 0;
+
+    // bad
+    const bar = a ** b - 5 % d;
+
+    // bad
+    // one may be confused into thinking (a || b) && c
+    if (a || b && c) {
+      return d;
+    }
+
+    // good
+    const foo = (a && b < 0) || c > 0 || (d + 1 === 0);
+
+    // good
+    const bar = (a ** b) - (5 % d);
+
+    // good
+    if (a || (b && c)) {
+      return d;
+    }
+
+    // good
+    const bar = a + b / c * d;
+    ```                              
+
+**[⬆ back to table](#table-of-contents)**
+
+## Blocks
+
+ - 所有的多行块都要用 `{}`
+
+    ```javascript
+    // bad
+    if (test)
+      return false;
+
+    // good
+    if (test) return false;
+
+    // good
+    if (test) {
+      return false;
+    }
+
+    // bad
+    function foo() { return false; }
+
+    // good
+    function bar() {
+      return false;
+    }
+    ```
+
+ - 如果使用 `if else`, `else` 需要和 `if` 的 `}` 在同一行
+
+    ```javascript
+    // bad
+    if (test) {
+      thing1();
+      thing2();
+    }
+    else {
+      thing3();
+    }
+
+    // good
+    if (test) {
+      thing1();
+      thing2();
+    } else {
+      thing3();
+    }
+    ```
+
+ - 如果一个 `if else` 语句内每个代码块都用了 `return` 语句，那么 `else` 语句就没有必要，分成多个 `if` 语句就行了
+
+    ```javascript
+    // bad
+    function foo() {
+      if (x) {
+        return x;
+      } else {
+        return y;
+      }
+    }
+
+    // bad
+    function cats() {
+      if (x) {
+        return x;
+      } else if (y) {
+        return y;
+      }
+    }
+
+    // bad
+    function dogs() {
+      if (x) {
+        return x;
+      } else {
+        if (y) {
+          return y;
+        }
+      }
+    }
+
+    // good
+    function foo() {
+      if (x) {
+        return x;
+      }
+
+      return y;
+    }
+
+    // good
+    function cats() {
+      if (x) {
+        return x;
+      }
+
+      if (y) {
+        return y;
+      }
+    }
+
+    //good
+    function dogs(x) {
+      if (x) {
+        if (z) {
+          return y;
+        }
+      } else {
+        return z;
+      }
+    }
+    ```           
+
+**[⬆ back to table](#table-of-contents)**
+
+## Control Statements
+
+ - 
+
+**[⬆ back to table](#table-of-contents)**  
