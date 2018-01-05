@@ -2196,6 +2196,1091 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
 
 ## Control Statements
 
- - 
+ - 如果你的控制语句，比如 `if`,`while`等很长，或者超过了行宽，你可以对其中的内容进行换行，但是需要注意，逻辑运算符需要放在行首
 
-**[⬆ back to table](#table-of-contents)**  
+    ```javascript
+    // bad
+    if ((foo === 123 || bar === 'abc') && doesItLookGoodWhenItBecomesThatLong() && isThisReallyHappening()) {
+      thing1();
+    }
+
+    // bad
+    if (foo === 123 &&
+      bar === 'abc') {
+      thing1();
+    }
+
+    // bad
+    if (foo === 123
+      && bar === 'abc') {
+      thing1();
+    }
+
+    // bad
+    if (
+      foo === 123 &&
+      bar === 'abc'
+    ) {
+      thing1();
+    }
+
+    // good
+    if (
+      foo === 123
+      && bar === 'abc'
+    ) {
+      thing1();
+    }
+
+    // good
+    if (
+      (foo === 123 || bar === "abc")
+      && doesItLookGoodWhenItBecomesThatLong()
+      && isThisReallyHappening()
+    ) {
+      thing1();
+    }
+
+    // good
+    if (foo === 123 && bar === 'abc') {
+      thing1();
+    }
+    ```     
+
+**[⬆ back to table](#table-of-contents)**
+
+## Comments
+
+ - 多行注释使用 `/** ... */`
+
+    ```javascript
+    // bad
+    // make() returns a new element
+    // based on the passed in tag name
+    //
+    // @param {String} tag
+    // @return {Element} element
+    function make(tag) {
+
+      // ...
+
+      return element;
+    }
+
+    // good
+    /**
+     * make() returns a new element
+     * based on the passed-in tag name
+     */
+        function make(tag) {
+
+      // ...
+
+      return element;
+    }
+    ```
+
+ - 单行注释用 `//`,并且在注释内容的上一行，在注释语句之前要空一行，当然，如果注释在文件的第一行就不需要空行了
+
+    ```javascript
+    // bad
+    const active = true;  // is current tab
+
+    // good
+    // is current tab
+    const active = true;
+
+    // bad
+    function getType() {
+      console.log('fetching type...');
+      // set the default type to 'no type'
+      const type = this.type || 'no type';
+
+      return type;
+    }
+
+    // good
+    function getType() {
+      console.log('fetching type...');
+
+      // set the default type to 'no type'
+      const type = this.type || 'no type';
+
+      return type;
+    }
+
+    // also good
+    function getType() {
+      // set the default type to 'no type'
+      const type = this.type || 'no type';
+
+      return type;
+    }
+    ```
+
+ - 注释文字以空格作为开始，方便阅读
+
+    ```javascript
+    // bad
+    //is current tab
+    const active = true;
+
+    // good
+    // is current tab
+    const active = true;
+
+    // bad
+    /**
+     *make() returns a new element
+     *based on the passed-in tag name
+     */
+    function make(tag) {
+
+      // ...
+
+      return element;
+    }
+
+    // good
+    /**
+     * make() returns a new element
+     * based on the passed-in tag name
+     */
+    function make(tag) {
+
+      // ...
+
+      return element;
+    }
+    ```
+
+ - 为你的提交或者评论加上 `FIXME` 或者 `TODO` 的前缀，好让其他开发者迅速明白你的意思。 `FIXME`表示这个问题需要弄清楚，`TODO`表示这个问题需要解决
+
+ - 使用 `// FIXME` 去注释问题
+
+    ```javascript
+    class Calculator extends Abacus {
+      constructor() {
+        super();
+
+        // FIXME: shouldn’t use a global here
+        total = 0;
+      }
+    }
+    ```
+
+ - 使用 `// TODO` 去注释问题的解决方法
+
+    ```javascript
+    class Calculator extends Abacus {
+      constructor() {
+        super();
+
+        // TODO: total should be configurable by an options param
+        this.total = 0;
+      }
+    }
+    ```                     
+
+**[⬆ back to table](#table-of-contents)**
+
+## Whitespace
+
+ - 使用 `tab` 去设置两个空格
+
+    ```javascript
+    // bad
+    function foo() {
+    ∙∙∙∙let name;
+    }
+
+    // bad
+    function bar() {
+    ∙let name;
+    }
+
+    // good
+    function baz() {
+    ∙∙let name;
+    }
+    ```
+
+ - 使用 `{}` 之前空一格
+
+    ```javascript
+    // bad
+    function test(){
+      console.log('test');
+    }
+
+    // good
+    function test() {
+      console.log('test');
+    }
+
+    // bad
+    dog.set('attr',{
+      age: '1 year',
+      breed: 'Bernese Mountain Dog',
+    });
+
+    // good
+    dog.set('attr', {
+      age: '1 year',
+      breed: 'Bernese Mountain Dog',
+    });
+    ```
+
+ - 判断语句（if,while）左括号之前加一个空格，在函数声明，函数调用，参数列表的 `()` 不需要空格
+
+    ```javascript
+    // bad
+    if(isJedi) {
+      fight ();
+    }
+
+    // good
+    if (isJedi) {
+      fight();
+    }
+
+    // bad
+    function fight () {
+      console.log ('Swooosh!');
+    }
+
+    // good
+    function fight() {
+      console.log('Swooosh!');
+    }
+    ```
+
+ - 操作符之间要加空格
+
+    ```javascript
+    // bad
+    const x=y+5;
+
+    // good
+    const x = y + 5;
+    ```
+
+ - 文件导出通过换行符结束
+
+    ```javascript
+    // bad
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;
+    ```
+
+    ```javascript
+    // bad
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;↵
+    ↵
+    ```
+
+    ```javascript
+    // good
+    import { es6 } from './AirbnbStyleGuide';
+      // ...
+    export default es6;↵
+    ```
+
+ - 如果写一个长的方法链（连续使用超过三个方法）时，使用缩进来表示层级关系。使用前导点来表示该行是一个方法调用而不是一个新的语句
+
+    ```javascript
+    // bad
+    $('#items').find('.selected').highlight().end().find('.open').updateCount();
+
+    // bad
+    $('#items').
+      find('.selected').
+        highlight().
+        end().
+      find('.open').
+        updateCount();
+
+    // good
+    $('#items')
+      .find('.selected')
+        .highlight()
+        .end()
+      .find('.open')
+        .updateCount();
+
+    // bad
+    const leds = stage.selectAll('.led').data(data).enter().append('svg:svg').classed('led', true)
+        .attr('width', (radius + margin) * 2).append('svg:g')
+        .attr('transform', `translate(${radius + margin},${radius + margin})`)
+        .call(tron.led);
+
+    // good
+    const leds = stage.selectAll('.led')
+        .data(data)
+      .enter().append('svg:svg')
+        .classed('led', true)
+        .attr('width', (radius + margin) * 2)
+      .append('svg:g')
+        .attr('transform', `translate(${radius + margin},${radius + margin})`)
+        .call(tron.led);
+
+    // good
+    const leds = stage.selectAll('.led').data(data);
+    ```
+ - 块与块，块与语句之间需要空一行
+
+    ```javascript
+    // bad
+    if (foo) {
+      return bar;
+    }
+    return baz;
+    
+    // good
+    if (foo) {
+      return bar;
+    }
+    
+    return baz;
+    
+    // bad
+    const obj = {
+      foo() {
+      },
+      bar() {
+      },
+    };
+    return obj;
+    
+    // good
+    const obj = {
+      foo() {
+      },
+    
+      bar() {
+      },
+    };
+    
+    return obj;
+    
+    // bad
+    const arr = [
+      function foo() {
+      },
+      function bar() {
+      },
+    ];
+    return arr;
+    
+    // good
+    const arr = [
+      function foo() {
+      },
+    
+      function bar() {
+      },
+    ];
+    
+    return arr;
+    ``` 
+
+ - 块内不要空行
+
+    ```javascript
+    // bad
+    function bar() {
+    
+      console.log(foo);
+    
+    }
+    
+    // bad
+    if (baz) {
+    
+      console.log(qux);
+    } else {
+      console.log(foo);
+    
+    }
+    
+    // bad  
+    class Foo {
+    
+      constructor(bar) {
+        this.bar = bar;
+      }
+    }
+    
+    // good
+    function bar() {
+      console.log(foo);
+    }
+    
+    // good
+    if (baz) {
+      console.log(qux);
+    } else {
+      console.log(foo);
+    }
+    ``` 
+
+ - `()` 里面不要加空格
+
+    ```javascript
+    // bad
+    function bar( foo ) {
+      return foo;
+    }
+    
+    // good
+    function bar(foo) {
+      return foo;
+    }
+    
+    // bad
+    if ( foo ) {
+      console.log(foo);
+    }
+    
+    // good
+    if (foo) {
+      console.log(foo);
+    }
+    ```
+
+ - `[]` 不要随意加空格
+
+    ```javascript
+    // bad
+    const foo = [ 1, 2, 3 ];
+    console.log(foo[ 0 ]);
+
+    // good
+    const foo = [1, 2, 3];
+    console.log(foo[0]);
+    ```
+
+ - `{}` 里面要加空格
+
+    ```javascript
+    // bad
+    const foo = {clark: 'kent'};
+
+    // good
+    const foo = { clark: 'kent' };
+    ```
+
+ - 除了之前提到的长字符串，避免出现一行代码超过100个字符的情况，这样确保了可维护性和可读性
+
+    ```javascript
+    // bad
+    const foo = jsonData && jsonData.foo && jsonData.foo.bar && jsonData.foo.bar.baz && jsonData.foo.bar.baz.quux && jsonData.foo.bar.baz.quux.xyzzy;
+
+    // bad
+    $.ajax({ method: 'POST', url: 'https://airbnb.com/', data: { name: 'John' } }).done(() => console.log('Congratulations!')).fail(() => console.log('You have failed this city.'));
+
+    // good
+    const foo = jsonData
+      && jsonData.foo
+      && jsonData.foo.bar
+      && jsonData.foo.bar.baz
+      && jsonData.foo.bar.baz.quux
+      && jsonData.foo.bar.baz.quux.xyzzy;
+
+    // good
+    $.ajax({
+      method: 'POST',
+      url: 'https://airbnb.com/',
+      data: { name: 'John' },
+    })
+      .done(() => console.log('Congratulations!'))
+      .fail(() => console.log('You have failed this city.'));
+    ```               
+
+**[⬆ back to table](#table-of-contents)**
+
+## Commas
+
+ - 逗号不要放在行首
+
+    ```javascript
+    // bad
+    const story = [
+        once
+      , upon
+      , aTime
+    ];
+
+    // good
+    const story = [
+      once,
+      upon,
+      aTime,
+    ];
+
+    // bad
+    const hero = {
+        firstName: 'Ada'
+      , lastName: 'Lovelace'
+      , birthYear: 1815
+      , superPower: 'computers'
+    };
+
+    // good
+    const hero = {
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      birthYear: 1815,
+      superPower: 'computers',
+    };
+    ```
+
+ - 有时需要附加的逗号，一是为了在 `git` 上能保持一致，因为 `git` 在增减之后都会带上逗号，二是一些像Babel这样的转译器会自动删除不必要的逗号，这意味着不必担心传统浏览器中的逗号尾随问题
+
+    ```diff
+    // bad - git diff without trailing comma
+    const hero = {
+         firstName: 'Florence',
+    -    lastName: 'Nightingale'
+    +    lastName: 'Nightingale',
+    +    inventorOf: ['coxcomb chart', 'modern nursing']
+    };
+
+    // good - git diff with trailing comma
+    const hero = {
+         firstName: 'Florence',
+         lastName: 'Nightingale',
+    +    inventorOf: ['coxcomb chart', 'modern nursing'],
+    };
+    ```
+
+    ```javascript
+    // bad
+    const hero = {
+      firstName: 'Dana',
+      lastName: 'Scully'
+    };
+
+    const heroes = [
+      'Batman',
+      'Superman'
+    ];
+
+    // good
+    const hero = {
+      firstName: 'Dana',
+      lastName: 'Scully',
+    };
+
+    const heroes = [
+      'Batman',
+      'Superman',
+    ];
+
+    // bad
+    function createHero(
+      firstName,
+      lastName,
+      inventorOf
+    ) {
+      // does nothing
+    }
+
+    // good
+    function createHero(
+      firstName,
+      lastName,
+      inventorOf,
+    ) {
+      // does nothing
+    }
+
+    // good (note that a comma must not appear after a "rest" element)
+    function createHero(
+      firstName,
+      lastName,
+      inventorOf,
+      ...heroArgs
+    ) {
+      // does nothing
+    }
+
+    // bad
+    createHero(
+      firstName,
+      lastName,
+      inventorOf
+    );
+
+    // good
+    createHero(
+      firstName,
+      lastName,
+      inventorOf,
+    );
+
+    // good (note that a comma must not appear after a "rest" element)
+    createHero(
+      firstName,
+      lastName,
+      inventorOf,
+      ...heroArgs
+    );
+    ```          
+
+**[⬆ back to table](#table-of-contents)**
+
+## Semicolons
+
+ - 在代码的结尾一定要用 `;` 结尾，防止javascript的自动分号插入机制使整个程序报错
+
+    ```javascript
+    // bad - raises exception
+    const luke = {}
+    const leia = {}
+    [luke, leia].forEach(jedi => jedi.father = 'vader')
+
+    // bad - raises exception
+    const reaction = "No! That's impossible!"
+    (async function meanwhileOnTheFalcon(){
+      // handle `leia`, `lando`, `chewie`, `r2`, `c3p0`
+      // ...
+    }())
+
+    // bad - returns `undefined` instead of the value on the next line - always happens when `return` is on a line by itself because of ASI!
+    function foo() {
+      return
+        'search your feelings, you know it to be foo'
+    }
+
+    // good
+    const luke = {};
+    const leia = {};
+    [luke, leia].forEach((jedi) => {
+      jedi.father = 'vader';
+    });
+
+    // good
+    const reaction = "No! That's impossible!";
+    (async function meanwhileOnTheFalcon(){
+      // handle `leia`, `lando`, `chewie`, `r2`, `c3p0`
+      // ...
+    }());
+
+    // good
+    function foo() {
+      return 'search your feelings, you know it to be foo';
+    }
+    ``` 
+
+**[⬆ back to table](#table-of-contents)**
+
+## Type Casting & Coercion
+
+ - 在语句开始进行强制类型转换
+
+ - `String` 类型
+
+    ```javascript
+    // => this.reviewScore = 9;
+
+    // bad
+    const totalScore = new String(this.reviewScore); // typeof totalScore is "object" not "string"
+
+    // bad
+    const totalScore = this.reviewScore + ''; // invokes this.reviewScore.valueOf()
+
+    // bad
+    const totalScore = this.reviewScore.toString(); // isn’t guaranteed to return a string
+
+    // good
+    const totalScore = String(this.reviewScore);
+    ```
+
+ - `Number` 类型，用 `Number` 或者 `parseInt` 进行强制转换，通常 `parseInt` 需要一个基数来解析字符串
+
+    ```javascript
+    const inputValue = '4';
+
+    // bad
+    const val = new Number(inputValue);
+
+    // bad
+    const val = +inputValue;
+
+    // bad
+    const val = inputValue >> 0;
+
+    // bad
+    const val = parseInt(inputValue);
+
+    // good
+    const val = Number(inputValue);
+
+    // good
+    const val = parseInt(inputValue, 10);
+    ```
+
+ - 如果 `parseInt` 是你代码的瓶颈，你不得不使用移位符来进行转换时，一定要在注释里面说明
+
+    ```javascript
+    // good
+    /**
+     * parseInt was the reason my code was slow.
+     * Bitshifting the String to coerce it to a
+     * Number made it a lot faster.
+     */
+    const val = inputValue >> 0;
+    ```
+
+ - 使用移位操作符时需要注意，数字可以表示为64位，但是移位操作符始终返回32位的源，对于大于32位的整数，移位操作可能会导致意外发生。最大的32位支持是 2,147,483,647
+ 
+    ```javascript
+    2147483647 >> 0; // => 2147483647
+    2147483648 >> 0; // => -2147483648
+    2147483649 >> 0; // => -2147483647
+    ``` 
+
+- `Booleans` 类型
+
+    ```javascript
+    const age = 0;
+
+    // bad
+    const hasAge = new Boolean(age);
+
+    // good
+    const hasAge = Boolean(age);
+
+    // best
+    const hasAge = !!age;
+    ```                  
+
+**[⬆ back to table](#table-of-contents)**
+
+## Naming Conventions
+
+ - 避免使用单字符命名，注意命名描述
+
+    ```javascript
+    // bad
+    function q() {
+      // ...
+    }
+
+    // good
+    function query() {
+      // ...
+    }
+    ```
+
+ - 命名对象，函数和实例时都使用驼峰命名
+
+    ```javascript
+    // bad
+    const OBJEcttsssss = {};
+    const this_is_my_object = {};
+    function c() {}
+
+    // good
+    const thisIsMyObject = {};
+    function thisIsMyFunction() {}
+    ```
+
+ - 对命名对象和构造函数时使用帕斯卡命名
+
+    ```javascript
+    // bad
+    function user(options) {
+      this.name = options.name;
+    }
+
+    const bad = new user({
+      name: 'nope',
+    });
+
+    // good
+    class User {
+      constructor(options) {
+        this.name = options.name;
+      }
+    }
+
+    const good = new User({
+      name: 'yup',
+    });
+    ```
+
+ - 头部，尾部不要使用下划线，因为JavaScript的属性或者方法没有隐私的概念。前导下换线是一个常见的惯例，表示“私人”，事实上，这些属性是完全公开的，这样会让人产生误解
+
+    ```javascript
+    // bad
+    this.__firstName__ = 'Panda';
+    this.firstName_ = 'Panda';
+    this._firstName = 'Panda';
+
+    // good
+    this.firstName = 'Panda';
+    ```
+
+ - 不要保存 `this` 指针，使用箭头函数或者 `#` 绑定来取代
+
+    ```javascript
+    // bad
+    function foo() {
+      const self = this;
+      return function () {
+        console.log(self);
+      };
+    }
+
+    // bad
+    function foo() {
+      const that = this;
+      return function () {
+        console.log(that);
+      };
+    }
+
+    // good
+    function foo() {
+      return () => {
+        console.log(this);
+      };
+    }
+    ```
+
+ - 基本文件名应该与其导出名字对应
+
+    ```javascript
+    // file 1 contents
+    class CheckBox {
+      // ...
+    }
+    export default CheckBox;
+
+    // file 2 contents
+    export default function fortyTwo() { return 42; }
+
+    // file 3 contents
+    export default function insideDirectory() {}
+
+    // in some other file
+    // bad
+    import CheckBox from './checkBox'; // PascalCase import/export, camelCase filename
+    import FortyTwo from './FortyTwo'; // PascalCase import/filename, camelCase export
+    import InsideDirectory from './InsideDirectory'; // PascalCase import/filename, camelCase export
+
+    // bad
+    import CheckBox from './check_box'; // PascalCase import/export, snake_case filename
+    import forty_two from './forty_two'; // snake_case import/filename, camelCase export
+    import inside_directory from './inside_directory'; // snake_case import, camelCase export
+    import index from './inside_directory/index'; // requiring the index file explicitly
+    import insideDirectory from './insideDirectory/index'; // requiring the index file explicitly
+
+    // good
+    import CheckBox from './CheckBox'; // PascalCase export/import/filename
+    import fortyTwo from './fortyTwo'; // camelCase export/import/filename
+    import insideDirectory from './insideDirectory'; // camelCase export/import/directory name/implicit "index"
+    // ^ supports both insideDirectory.js and insideDirectory/index.js
+    ```
+
+ - 默认导出一个方法时，使用驼峰命名表示。同时，你的文件名应该与方法名一致
+
+    ```javascript
+    function makeStyleGuide() {
+      // ...
+    }
+
+    export default makeStyleGuide;
+    ```
+
+ - 导出构造函数，类，单例，函数库等时，使用帕斯卡命名
+
+    ```javascript
+    const AirbnbStyleGuide = {
+      es6: {
+      },
+    };
+
+    export default AirbnbStyleGuide;
+    ```
+
+ - 缩略词应该全是大小字母或者全是小写字母构成，这样才有可读性
+
+    ```javascript
+    // bad
+    import SmsContainer from './containers/SmsContainer';
+
+    // bad
+    const HttpRequests = [
+      // ...
+    ];
+
+    // good
+    import SMSContainer from './containers/SMSContainer';
+
+    // good
+    const HTTPRequests = [
+      // ...
+    ];
+
+    // also good
+    const httpRequests = [
+      // ...
+    ];
+
+    // best
+    import TextMessageContainer from './containers/TextMessageContainer';
+
+    // best
+    const requests = [
+      // ...
+    ];
+    ```                                         
+
+**[⬆ back to table](#table-of-contents)**
+
+## Accessors
+
+ - 属性的访问方法不是必须的
+
+ - 不要使用JavaScript的 getters/setters，因为它们会造成意想不到的坏的影响，并且很难去测试，定位。所以如果你要用访问函数，使用 `getVal()`和 `setVal()` 这样的方式
+
+    ```javascript
+    // bad
+    class Dragon {
+      get age() {
+        // ...
+      }
+
+      set age(value) {
+        // ...
+      }
+    }
+
+    // good
+    class Dragon {
+      getAge() {
+        // ...
+      }
+
+      setAge(value) {
+        // ...
+      }
+    }
+    ```
+
+ - 如果一个属性值或者方法返回值是布尔类型，使用 `isVal()`或者 `hasVal()`这样的形式
+
+    ```javascript
+    // bad
+    if (!dragon.age()) {
+      return false;
+    }
+
+    // good
+    if (!dragon.hasAge()) {
+      return false;
+    }
+    ```
+
+ - 可以创建类似 `get()` 和 `set()` 这样的函数方法，但是要注意保持一致
+
+    ```javascript
+    class Jedi {
+      constructor(options = {}) {
+        const lightsaber = options.lightsaber || 'blue';
+        this.set('lightsaber', lightsaber);
+      }
+
+      set(key, val) {
+        this[key] = val;
+      }
+
+      get(key) {
+        return this[key];
+      }
+    }
+    ```           
+
+**[⬆ back to table](#table-of-contents)**
+
+## Events
+
+ - 当将数据传递到事件方法里面的时候，不要使用原始值直接进行传递，应该处理成对象字面量。这样可以方便其他用户修改或者查看传递数据
+
+    ```javascript
+    // bad
+    $(this).trigger('listingUpdated', listing.id);
+
+    // ...
+
+    $(this).on('listingUpdated', (e, listingId) => {
+      // do something with listingId
+    });
+    ```
+
+    prefer:
+
+    ```javascript
+    // good
+    $(this).trigger('listingUpdated', { listingId: listing.id });
+
+    // ...
+
+    $(this).on('listingUpdated', (e, data) => {
+      // do something with data.listingId
+    });
+    ```   
+
+**[⬆ back to table](#table-of-contents)**
+
+## jQuery
+
+ - 通过 `$` 来声明一个承载jquery的元素
+
+    ```javascript
+    // bad
+    const sidebar = $('.sidebar');
+
+    // good
+    const $sidebar = $('.sidebar');
+
+    // good
+    const $sidebarBtn = $('.sidebar-btn');
+    ```
+
+ - 将jquery选择器缓存起来
+
+    ```javascript
+    // bad
+    function setSidebar() {
+      $('.sidebar').hide();
+
+      // ...
+
+      $('.sidebar').css({
+        'background-color': 'pink',
+      });
+    }
+
+    // good
+    function setSidebar() {
+      const $sidebar = $('.sidebar');
+      $sidebar.hide();
+
+      // ...
+
+      $sidebar.css({
+        'background-color': 'pink',
+      });
+    }
+    ```
+
+ -           
+
+**[⬆ back to table](#table-of-contents)**
