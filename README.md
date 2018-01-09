@@ -30,10 +30,8 @@
   24. [Accessors](#accessors)
   25. [Events](#events)
   26. [jQuery](#jquery)
-  27. [ECMAScript 5 Compatibility](#ecmascript-5-compatibility)
-  28. [ECMAScript 6+ (ES 2015+) Styles](#ecmascript-6-es-2015-styles)
-  29. [Standard Library](#standard-library)
-  30. [Testing](#testing)
+  27. [Standard Library](#standard-library)
+  28. [Testing](#testing)
 
 ## Table of Notes
 
@@ -3281,6 +3279,66 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     }
     ```
 
- -           
+ - 对于 DOM 节点的查询使用级联 `$('.sidebar ul')` 或者 父级 > 子级 `$('.sidebar > ul')`
+
+ - 块级jQuery对象查询（通过选择器对象进行查询），使用 `find`
+
+    ```javascript
+    // bad
+    $('ul', '.sidebar').hide();
+
+    // bad
+    $('.sidebar').find('ul').hide();
+
+    // good
+    $('.sidebar ul').hide();
+
+    // good
+    $('.sidebar > ul').hide();
+
+    // good
+    $sidebar.find('ul').hide();
+    ```            
 
 **[⬆ back to table](#table-of-contents)**
+
+## Standard Library
+
+ - 使用 `Number.isNaN` 来代替全局的 `isNaN`，因为全局的 `isNaN` 会强制将非数字类型转换为数字类型,任何强制转换为非数字的都会返回true
+
+    ```javascript
+    // bad
+    isNaN('1.2'); // false
+    isNaN('1.2.3'); // true
+    
+    // good
+    Number.isNaN('1.2.3'); // false
+    Number.isNaN(Number('1.2.3')); // true
+    ```
+
+ - 使用 `Number.isFinite` 来代替全局的 `isFinite`，因为全局的 `isFinite` 会强制将非数字类型转换为数字类型，任何强制转换为有限数字的结果都会返回true
+
+    ```javascript
+    // bad
+    isFinite('2e3'); // true
+
+    // good
+    Number.isFinite('2e3'); // false
+    Number.isFinite(parseInt('2e3', 10)); // true
+    ```   
+
+**[⬆ back to table](#table-of-contents)**
+
+## Testing
+
+ - 无论您使用那种框架，都应该测试！
+
+ - 尽量去写一些写的纯函数，并且尽量减少突变情况的发生
+
+ - 谨慎使用 stubs(存根) 和 mocks(虚拟数据)，他们会让你的测试更加脆弱
+
+ - Airbnb 主要使用 [`mocha`](https://www.npmjs.com/package/mocha) 来进行测试，偶尔也用 [`tape`](https://www.npmjs.com/package/tape) 来测试小的独立模块
+
+ - 100%的测试覆盖率是最理想的
+
+ - 每当你修复了一个bug，都需要写一个回归测试。未经回归测试修正的错误，未来一定会重现
