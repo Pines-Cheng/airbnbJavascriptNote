@@ -1,37 +1,43 @@
 # Airbnb JavaScript Style 阅读注解
 
-*提供一种合理的javascript的规范*
+*提供一种合理的javascript的规范,对原文主要内容进行翻译，同时对部分内容进行注释*
+
+> **注意**：本文假定你正在使用 [Babel](https://babeljs.io)，并且要求你使用 [babel-preset-airbnb](https://npmjs.com/babel-preset-airbnb)或者其替代品。同时，假定你已经通过[airbnb-browser-shims](https://npmjs.com/airbnb-browser-shims)或者其替代品安装 shims/polyfills 在你的app内。
+
+## 原文
+
+ - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 
 ## Table of Contents
 
-  1. [Types](#types)
-  2. [References](#references)
-  3. [Objects](#objects)
-  4. [Arrays](#arrays)
-  5. [Destructuring](#destructuring)
-  6. [Strings](#strings)
-  7. [Functions](#functions)
-  8. [Arrow Functions](#arrow-functions)
-  9. [Classes & Constructors](#classes--constructors)
-  10. [Modules](#modules)
-  11. [Iterators and Generators](#iterators-and-generators)
-  12. [Properties](#properties)
-  13. [Variables](#variables)
-  14. [Hoisting](#hoisting)
-  15. [Comparison Operators & Equality](#comparison-operators--equality)
-  16. [Blocks](#blocks)
-  17. [Control Statements](#control-statements)
-  18. [Comments](#comments)
-  19. [Whitespace](#whitespace)
-  20. [Commas](#commas)
-  21. [Semicolons](#semicolons)
-  22. [Type Casting & Coercion](#type-casting--coercion)
-  23. [Naming Conventions](#naming-conventions)
-  24. [Accessors](#accessors)
-  25. [Events](#events)
+  1. [Types（数据类型）](#types)
+  2. [References（引用）](#references)
+  3. [Objects（对象）](#objects)
+  4. [Arrays（数组）](#arrays)
+  5. [Destructuring（解构）](#destructuring)
+  6. [Strings（字符串）](#strings)
+  7. [Functions（函数）](#functions)
+  8. [Arrow Functions（箭头函数）](#arrow-functions)
+  9. [Classes & Constructors（类与构造函数）](#classes--constructors)
+  10. [Modules（模块）](#modules)
+  11. [Iterators and Generators（迭代器和发生器）](#iterators-and-generators)
+  12. [Properties（属性）](#properties)
+  13. [Variables（变量）](#variables)
+  14. [Hoisting（变量提升）](#hoisting)
+  15. [Comparison Operators & Equality（比较操作符和等号）](#comparison-operators--equality)
+  16. [Blocks（块）](#blocks)
+  17. [Control Statements（控制语句）](#control-statements)
+  18. [Comments（注释）](#comments)
+  19. [Whitespace（空格）](#whitespace)
+  20. [Commas（逗号）](#commas)
+  21. [Semicolons（分号）](#semicolons)
+  22. [Type Casting & Coercion（强制类型转换）](#type-casting--coercion)
+  23. [Naming Conventions（命名协议）](#naming-conventions)
+  24. [Accessors（访问方法）](#accessors)
+  25. [Events（事件）](#events)
   26. [jQuery](#jquery)
-  27. [Standard Library](#standard-library)
-  28. [Testing](#testing)
+  27. [Standard Library（标准程序库）](#standard-library)
+  28. [Testing（测试）](#testing)
 
 ## Table of Notes
 
@@ -126,7 +132,7 @@
 
 **注意**，由于 `.` 运算符后面总是字符串，所以`Symbol()` 不支持点式声明对象属性。在对象内部使用 `[symbol]` 这样的写法也是这个道理
 
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## References
 
@@ -227,7 +233,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
 
 函数作用域，每个函数被声明时的上下文执行环境，`fucnction(){..function-scoped..}` 
 
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## Objects
 
@@ -474,7 +480,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     Math.max(...[1,2,3]) 👉 3
     ```
 
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## Arrays
 
@@ -663,7 +669,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     [2, 3, 4]
     ```     
 
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## Destructuring
 
@@ -741,7 +747,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
       }
       fn1(arr); 👉 6
     ```  
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## Strings
 
@@ -1095,7 +1101,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     b([void 0,3],4); 👉 NaN
     ```     
 
-**[⬆ back to note](#table-of-note)** 
+**[⬆ back to note](#table-of-notes)** 
 
 ## Arrow Functions
 
@@ -1238,7 +1244,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
     f(); 👉 6;
     ```   
 
-**[⬆ back to note](#table-of-note)**
+**[⬆ back to note](#table-of-notes)**
 
 ## Classes & Constructors
 
