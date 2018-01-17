@@ -731,7 +731,7 @@ let允许你声明一个作用域被限制在块级中的变量、语句或者�
 
 **[⬆ back to table](#table-of-contents)**
 
-#### note4
+#### note5
 
  - *Destructuring*：解构。解构的作用是可以快速取得数组或对象当中的元素或属性，而无需使用arr[x]或者obj[key]等传统方式进行赋值。
 

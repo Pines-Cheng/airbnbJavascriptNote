@@ -1,0 +1,11 @@
+{
+  "name": "BabelTest",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "babel origin -d src"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0"
+  }
+}
