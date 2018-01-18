@@ -1,3 +1,8 @@
 ;(function(window,undefined){
-	input.map(item => item + 1);
+	const hello = function testHelloWorld(){
+		const str = 'hello';
+		const strHello = `${str},world`;
+		alert(strHello);
+	};
+	hello();
 })(window);

@@ -2,10 +2,26 @@
   "name": "BabelTest",
   "version": "1.0.0",
   "scripts": {
-    "build": "babel origin -d src"
+    "build": "babel origin -d src",
+    "help": "babel --help",
+    "compileOne": "babel origin/1.js",
+    "compileO": "babel origin/1.js origin/2.js -o output.js"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "babel-runtime": "^6.26.0",
+    "chokidar": "^1.6.1",
+    "commander": "^2.11.0",
+    "convert-source-map": "^1.5.0",
+    "fs-readdir-recursive": "^1.0.0",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.4",
+    "output-file-sync": "^1.1.2",
+    "path-is-absolute": "^1.0.1",
+    "slash": "^1.0.0",
+    "source-map": "^0.5.6",
+    "v8flags": "^2.1.1"
   }
 }
