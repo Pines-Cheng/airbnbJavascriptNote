@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "babel origin -d src",
-    "help": "babel --help",
-    "compileOne": "babel origin/1.js",
-    "compileO": "babel origin/1.js origin/2.js -o output.js"
+    "help": "babel --help"
   },
   "dependencies": {
     "babel-core": "^6.26.0",

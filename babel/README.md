@@ -95,4 +95,16 @@
 
 针对文件编译，选择编译插件，通常配合编译命令使用
 
-	--plugins=[pluginsList]				
+	--plugins=[pluginsList]
+
+了解更多 [Babel Options](https://babeljs.cn/docs/usage/api/#options)
+
+### 🚩babel in sublime
+
+在sublime编辑器中支持babel语法，首先在sublime中安装 `babel`
+
+	ctrl-shift-p -> install ->babel					
+
+安装完之后，只需要在每次生成文件的时候选择babel类型即可
+
+	ctrl-shift-p -> set Syntax: Javascript(babel)
